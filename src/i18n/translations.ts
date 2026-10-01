@@ -18,17 +18,24 @@ export const SUPPORTED_LANGUAGES: LanguageOption[] = [
 export const translations = {
   en: {
     // Navigation & General
-    app_title: 'NomadTax & Visa',
-    app_subtitle: 'Schengen 90/180 & 183-Day Tax Engine',
-    app_tagline: 'Privacy-first day counter for digital nomads, expats & remote workers',
+    app_title: 'NomadTax & Visa Worldwide',
+    app_subtitle: 'Schengen 90/180 · US SPT · Americas & APAC',
+    app_tagline: 'Global visa & tax compliance operating system for digital nomads and frequent travelers',
     private_badge: '100% Client-Side & Private',
     trips_tracked: '{count} Trips Tracked',
     export_audit: 'Export Audit',
     export_csv: 'Export CSV',
-    footer_text: 'NomadTax & Visa © 2026. Built with 100% client-side deterministic algorithms. Zero server compute, zero tracking.',
+    footer_text: 'NomadTax & Visa Worldwide © 2026. Built with 100% client-side deterministic algorithms. Zero server compute, zero tracking.',
     schengen_standard: 'Schengen 90/180 Standard',
-    tax_rules: '183-Day Tax Residency Rules',
+    tax_rules: 'Worldwide Tax Residency Rules',
     offline_ready: 'Offline-Ready Client Storage',
+
+    // Global Regional Tabs
+    tab_all_compliance: 'All-in-One Dashboard',
+    tab_schengen: 'Schengen 90/180',
+    tab_us_spt: 'USA Substantial Presence (SPT)',
+    tab_americas_apac: 'Americas & Asia-Pacific Rules',
+    tab_tax_residency: '183-Day Tax Clocks',
 
     // Presets
     presets_title: 'Quick Traveler Scenarios (Presets)',

@@ -196,5 +196,73 @@ export const SAMPLE_TRIP_PRESETS: { id: string; name: string; description: strin
         purpose: 'Summer with family (77 days - Total 158 in Spain!)'
       }
     ]
+  },
+  {
+    id: 'americas-digital-nomad',
+    name: 'Americas Hub & US Presence Test',
+    description: 'Covers US ESTA / B1/B2 visits (weighted presence test monitoring), Mexico 180d FMM, and Colombia nomad visa hub.',
+    trips: [
+      {
+        id: 'am-1',
+        country: 'Mexico',
+        countryCode: 'MX',
+        startDate: '2026-01-10',
+        endDate: '2026-03-20',
+        isSchengen: false,
+        purpose: 'Winter coworking in Mexico City & Oaxaca (70 days)'
+      },
+      {
+        id: 'am-2',
+        country: 'United States',
+        countryCode: 'US',
+        startDate: '2026-04-01',
+        endDate: '2026-05-15',
+        isSchengen: false,
+        purpose: 'Tech conference & client roadshow in California (45 days)'
+      },
+      {
+        id: 'am-3',
+        country: 'Colombia',
+        countryCode: 'CO',
+        startDate: '2026-06-01',
+        endDate: '2026-08-15',
+        isSchengen: false,
+        purpose: 'Medellin nomad hub & coffee region (76 days)'
+      }
+    ]
+  },
+  {
+    id: 'asia-pacific-hopping',
+    name: 'Asia-Pacific Trail (Japan, Bali, Thailand)',
+    description: 'Navigating Thailand 60d exemption + remittance tax rule, Japan 90d waiver (180d cap), and Bali VoA stay.',
+    trips: [
+      {
+        id: 'ap-1',
+        country: 'Thailand',
+        countryCode: 'TH',
+        startDate: '2026-01-15',
+        endDate: '2026-03-10',
+        isSchengen: false,
+        purpose: 'Bangkok & Chiang Mai coworking season (55 days)'
+      },
+      {
+        id: 'ap-2',
+        country: 'Japan',
+        countryCode: 'JP',
+        startDate: '2026-03-25',
+        endDate: '2026-06-10',
+        isSchengen: false,
+        purpose: 'Cherry blossom & Tokyo remote work (78 days)'
+      },
+      {
+        id: 'ap-3',
+        country: 'Indonesia',
+        countryCode: 'ID',
+        startDate: '2026-06-20',
+        endDate: '2026-08-18',
+        isSchengen: false,
+        purpose: 'Bali Canggu & Ubud coworking (60 days)'
+      }
+    ]
   }
 ];

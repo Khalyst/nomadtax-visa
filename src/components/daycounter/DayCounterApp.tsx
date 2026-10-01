@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Trip, CountryTaxSummary, ForwardSimulationResult, SchengenDayStatus } from '../../types';
+import { Region } from '../../types/regional';
 import { 
   SCHENGEN_COUNTRIES, 
   isCountrySchengen, 
@@ -14,9 +15,16 @@ import {
   calculateTaxResidencySummary, 
   SAMPLE_TRIP_PRESETS 
 } from '../../utils/taxResidencyCalculator';
+import { 
+  calculateUSSubstantialPresence, 
+  calculateRegionalSummaries 
+} from '../../utils/regionalRules';
+import { WORLDWIDE_COUNTRIES } from '../../utils/worldwideCountries';
 import { encodeItineraryToUrl, decodeItineraryFromUrl } from '../../utils/urlSharing';
 import { DateRangePicker } from './DateRangePicker';
 import { CountryStayDistributionChart } from './CountryStayDistributionChart';
+import { USSubstantialPresenceCard } from './USSubstantialPresenceCard';
+import { RegionalRulesView } from './RegionalRulesView';
 import { ShareModal } from '../ShareModal';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { 
@@ -126,13 +134,20 @@ export const DayCounterApp: React.FC<DayCounterAppProps> = ({ onTripsChange }) =
   // Tax residency view mode
   const [taxMode, setTaxMode] = useState<'calendar_year' | 'rolling_365'>('calendar_year');
 
+  // Active Global Section Tab
+  const [activeGlobalTab, setActiveGlobalTab] = useState<'all' | 'schengen' | 'us_spt' | 'americas_apac' | 'tax'>('all');
+
+  // Selected region for regional rules
+  const [activeRegion, setActiveRegion] = useState<Region>('americas');
+
   // Search query state for Trip Itinerary Log
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Auto-update isSchengen when country input changes
   const handleCountryChange = (cName: string) => {
     setCountryInput(cName);
-    setIsSchengenInput(isCountrySchengen(cName));
+    const countryObj = WORLDWIDE_COUNTRIES.find(c => c.name.toLowerCase() === cName.toLowerCase());
+    setIsSchengenInput(countryObj ? countryObj.isSchengen : isCountrySchengen(cName));
   };
 
   // Calculations memoized
@@ -157,6 +172,18 @@ export const DayCounterApp: React.FC<DayCounterAppProps> = ({ onTripsChange }) =
     [referenceDate, trips]
   );
 
+  // US Substantial Presence Test (SPT) Calculation
+  const usSPTResult = useMemo(
+    () => calculateUSSubstantialPresence(trips, 2026),
+    [trips]
+  );
+
+  // Regional summaries for selected region (Americas, APAC, etc.)
+  const regionalSummaries = useMemo(
+    () => calculateRegionalSummaries(trips, activeRegion, referenceDate),
+    [trips, activeRegion, referenceDate]
+  );
+
   // Filtered trips for Itinerary Log by country name
   const filteredTrips = useMemo(
     () => trips.filter(t =>
@@ -170,13 +197,14 @@ export const DayCounterApp: React.FC<DayCounterAppProps> = ({ onTripsChange }) =
     e.preventDefault();
     if (!startDateInput || !endDateInput) return;
 
+    const countryMatch = WORLDWIDE_COUNTRIES.find(c => c.name.toLowerCase() === countryInput.toLowerCase());
     const newTrip: Trip = {
       id: 'trip_' + Date.now(),
       country: countryInput,
-      countryCode: SCHENGEN_COUNTRIES.find(c => c.name.toLowerCase() === countryInput.toLowerCase())?.code || 'XX',
+      countryCode: countryMatch?.code || 'XX',
       startDate: startDateInput,
       endDate: endDateInput,
-      isSchengen: isSchengenInput,
+      isSchengen: countryMatch ? countryMatch.isSchengen : isSchengenInput,
       purpose: purposeInput.trim() || undefined
     };
 
@@ -331,7 +359,84 @@ export const DayCounterApp: React.FC<DayCounterAppProps> = ({ onTripsChange }) =
         </div>
       </div>
 
-      {/* Main Metric Cards Grid */}
+      {/* Global Navigation Tabs: All-in-One, Schengen, US SPT, Americas/APAC, Tax */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-slate-800">
+        <button
+          onClick={() => setActiveGlobalTab('all')}
+          className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 ${
+            activeGlobalTab === 'all'
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+              : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+          }`}
+        >
+          <span>🌐</span>
+          <span>{t('tab_all_compliance')}</span>
+        </button>
+
+        <button
+          onClick={() => setActiveGlobalTab('schengen')}
+          className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 ${
+            activeGlobalTab === 'schengen'
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+              : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+          }`}
+        >
+          <span>🇪🇺</span>
+          <span>{t('tab_schengen')}</span>
+          <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+            currentSchengenStatus.isOverstay ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-300'
+          }`}>
+            {currentSchengenStatus.daysUsedInWindow}/90d
+          </span>
+        </button>
+
+        <button
+          onClick={() => setActiveGlobalTab('us_spt')}
+          className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 ${
+            activeGlobalTab === 'us_spt'
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+              : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+          }`}
+        >
+          <span>🇺🇸</span>
+          <span>{t('tab_us_spt')}</span>
+          <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+            usSPTResult.isSubstantialPresenceMet ? 'bg-rose-500 text-white' : 'bg-slate-800 text-slate-300'
+          }`}>
+            {usSPTResult.weightedScore} pts
+          </span>
+        </button>
+
+        <button
+          onClick={() => setActiveGlobalTab('americas_apac')}
+          className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 ${
+            activeGlobalTab === 'americas_apac'
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+              : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+          }`}
+        >
+          <span>🌎🌏</span>
+          <span>{t('tab_americas_apac')}</span>
+        </button>
+
+        <button
+          onClick={() => setActiveGlobalTab('tax')}
+          className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 ${
+            activeGlobalTab === 'tax'
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+              : 'bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800'
+          }`}
+        >
+          <span>⏱️</span>
+          <span>{t('tab_tax_residency')}</span>
+          <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300">
+            {taxSummaries.length} countries
+          </span>
+        </button>
+      </div>
+
+      {/* Main Metric Cards Grid (Schengen & Forward Planning) */}
+      {(activeGlobalTab === 'all' || activeGlobalTab === 'schengen') && (
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Card 1: Schengen 90/180 Status Gauge */}
         <div className="lg:col-span-2 rounded-2xl bg-slate-900 border border-slate-800 p-6 space-y-5 shadow-lg relative overflow-hidden">
@@ -540,8 +645,46 @@ export const DayCounterApp: React.FC<DayCounterAppProps> = ({ onTripsChange }) =
           </div>
         </div>
       </div>
+      )}
+
+      {/* US Substantial Presence Test (SPT) Section */}
+      {(activeGlobalTab === 'all' || activeGlobalTab === 'us_spt') && (
+        <section>
+          <USSubstantialPresenceCard
+            result={usSPTResult}
+            currentYear={2026}
+          />
+        </section>
+      )}
+
+      {/* Regional Immigration & Tax Rules (Americas, Asia-Pacific, UK, Hubs) */}
+      {(activeGlobalTab === 'all' || activeGlobalTab === 'americas_apac') && (
+        <section className="rounded-2xl bg-slate-900 border border-slate-800 p-6 space-y-5 shadow-lg">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl">🌎🌏</span>
+                <h3 className="text-lg font-bold text-white tracking-tight">
+                  Regional Immigration Limits &amp; Digital Nomad Visas
+                </h3>
+              </div>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Specialized rules for the Americas, Asia-Pacific, and non-Schengen hubs (stay ceilings, border runs &amp; nomad visas)
+              </p>
+            </div>
+          </div>
+
+          <RegionalRulesView
+            summaries={regionalSummaries}
+            activeRegion={activeRegion}
+            onRegionChange={setActiveRegion}
+            referenceDate={referenceDate}
+          />
+        </section>
+      )}
 
       {/* 183-Day Tax Residency Tracker Section */}
+      {(activeGlobalTab === 'all' || activeGlobalTab === 'tax') && (
       <section className="rounded-2xl bg-slate-900 border border-slate-800 p-6 space-y-4 shadow-lg">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
           <div>
@@ -648,6 +791,7 @@ export const DayCounterApp: React.FC<DayCounterAppProps> = ({ onTripsChange }) =
           </div>
         )}
       </section>
+      )}
 
       {/* Visual Timeline Strip (Past 20 days to Next 40 days) */}
       <section className="rounded-2xl bg-slate-900 border border-slate-800 p-6 space-y-3 shadow-lg">
@@ -811,23 +955,40 @@ export const DayCounterApp: React.FC<DayCounterAppProps> = ({ onTripsChange }) =
                   onChange={e => handleCountryChange(e.target.value)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500"
                 >
-                  <optgroup label="Schengen Countries">
-                    {SCHENGEN_COUNTRIES.map(c => (
+                  <optgroup label="Europe (Schengen Area)">
+                    {WORLDWIDE_COUNTRIES.filter(c => c.region === 'europe' && c.isSchengen).map(c => (
                       <option key={c.code} value={c.name}>
-                        {c.name}
+                        {c.flag} {c.name}
                       </option>
                     ))}
                   </optgroup>
-                  <optgroup label="Popular Non-Schengen">
-                    <option value="United Kingdom">United Kingdom</option>
-                    <option value="United States">United States</option>
-                    <option value="United Arab Emirates">United Arab Emirates</option>
-                    <option value="Albania">Albania</option>
-                    <option value="Cyprus">Cyprus</option>
-                    <option value="Indonesia">Indonesia (Bali)</option>
-                    <option value="Thailand">Thailand</option>
-                    <option value="Mexico">Mexico</option>
-                    <option value="Japan">Japan</option>
+                  <optgroup label="Europe (Non-Schengen & UK)">
+                    {WORLDWIDE_COUNTRIES.filter(c => c.region === 'europe' && !c.isSchengen).map(c => (
+                      <option key={c.code} value={c.name}>
+                        {c.flag} {c.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="The Americas">
+                    {WORLDWIDE_COUNTRIES.filter(c => c.region === 'americas').map(c => (
+                      <option key={c.code} value={c.name}>
+                        {c.flag} {c.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Asia-Pacific (APAC)">
+                    {WORLDWIDE_COUNTRIES.filter(c => c.region === 'asia_pacific').map(c => (
+                      <option key={c.code} value={c.name}>
+                        {c.flag} {c.name}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Middle East & Africa">
+                    {WORLDWIDE_COUNTRIES.filter(c => c.region === 'middle_east_africa').map(c => (
+                      <option key={c.code} value={c.name}>
+                        {c.flag} {c.name}
+                      </option>
+                    ))}
                   </optgroup>
                 </select>
               </div>
