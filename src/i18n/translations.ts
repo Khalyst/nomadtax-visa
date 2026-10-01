@@ -37,6 +37,7 @@ export const translations = {
     tab_americas_apac: 'Americas & Asia-Pacific Rules',
     tab_tax_residency: '183-Day Tax Clocks',
     tab_knowledge_hub: 'Compliance Guides & SEO Hub',
+    tab_toolkit: 'Nomad Travel Essentials',
 
     // Presets
     presets_title: 'Quick Traveler Scenarios (Presets)',

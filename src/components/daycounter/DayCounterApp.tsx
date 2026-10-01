@@ -47,9 +47,11 @@ import {
   X,
   Share2,
   BookmarkCheck,
-  BookOpen
+  BookOpen,
+  HeartHandshake
 } from 'lucide-react';
 import { SeoContentHub } from '../seo/SeoContentHub';
+import { NomadToolkit, SchengenInsuranceCallout, GlobalBankingCallout } from '../affiliates/NomadToolkit';
 
 const STORAGE_KEY = 'utilitylab_user_trips';
 
@@ -137,12 +139,14 @@ export const DayCounterApp: React.FC<DayCounterAppProps> = ({ onTripsChange }) =
   const [taxMode, setTaxMode] = useState<'calendar_year' | 'rolling_365'>('calendar_year');
 
   // Active Global Section Tab
-  const [activeGlobalTab, setActiveGlobalTab] = useState<'all' | 'schengen' | 'us_spt' | 'americas_apac' | 'tax' | 'knowledge'>('all');
+  const [activeGlobalTab, setActiveGlobalTab] = useState<'all' | 'schengen' | 'us_spt' | 'americas_apac' | 'tax' | 'knowledge' | 'toolkit'>('all');
 
-  // Check if hash has a guide or knowledge hub request
+  // Check if hash has a guide, knowledge hub or toolkit request
   useEffect(() => {
     if (window.location.hash.includes('guide=') || window.location.hash.includes('knowledge')) {
       setActiveGlobalTab('knowledge');
+    } else if (window.location.hash.includes('toolkit')) {
+      setActiveGlobalTab('toolkit');
     }
   }, []);
 
@@ -457,7 +461,29 @@ export const DayCounterApp: React.FC<DayCounterAppProps> = ({ onTripsChange }) =
             4 Guides
           </span>
         </button>
+
+        <button
+          onClick={() => setActiveGlobalTab('toolkit')}
+          className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 ${
+            activeGlobalTab === 'toolkit'
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+              : 'bg-slate-900 text-emerald-400 hover:text-emerald-300 border border-emerald-900/60'
+          }`}
+        >
+          <HeartHandshake className="w-3.5 h-3.5 text-emerald-400" />
+          <span>{t('tab_toolkit')}</span>
+          <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-800/80">
+            Vetted Deals
+          </span>
+        </button>
       </div>
+
+      {/* Nomad Toolkit & Affiliate Essentials Section */}
+      {activeGlobalTab === 'toolkit' && (
+        <section className="animate-fadeIn">
+          <NomadToolkit />
+        </section>
+      )}
 
       {/* SEO Compliance Knowledge Base Section */}
       {activeGlobalTab === 'knowledge' && (
@@ -686,6 +712,11 @@ export const DayCounterApp: React.FC<DayCounterAppProps> = ({ onTripsChange }) =
       </div>
       )}
 
+      {/* Contextual Nomad Insurance Callout for Schengen */}
+      {(activeGlobalTab === 'all' || activeGlobalTab === 'schengen') && (
+        <SchengenInsuranceCallout />
+      )}
+
       {/* US Substantial Presence Test (SPT) Section */}
       {(activeGlobalTab === 'all' || activeGlobalTab === 'us_spt') && (
         <section>
@@ -830,6 +861,11 @@ export const DayCounterApp: React.FC<DayCounterAppProps> = ({ onTripsChange }) =
           </div>
         )}
       </section>
+      )}
+
+      {/* Contextual Multi-Currency Banking Callout for Global Taxes */}
+      {(activeGlobalTab === 'all' || activeGlobalTab === 'tax') && (
+        <GlobalBankingCallout />
       )}
 
       {/* Visual Timeline Strip (Past 20 days to Next 40 days) */}
