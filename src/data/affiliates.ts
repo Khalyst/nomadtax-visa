@@ -16,6 +16,25 @@ export interface AffiliatePartner {
 
 export const AFFILIATE_PARTNERS: AffiliatePartner[] = [
   {
+    id: 'revolut',
+    category: 'banking',
+    badge: 'Worldwide Traveler & Expat Favorite',
+    name: 'Revolut Global Account & Cards',
+    tagline: 'Global money app with fee-free spending abroad, competitive FX, and instant crypto/stock vaults.',
+    description: 'Spend in 150+ currencies with real-time exchange rates, receive payments, split bills, and withdraw cash at global ATMs with zero hidden markups.',
+    keyBenefits: [
+      'Spend globally in 150+ currencies with high interbank exchange rates',
+      'Virtual disposable cards for secure online travel bookings',
+      'Instant overseas transfers and multi-currency sub-accounts'
+    ],
+    nomadFit: 'Perfect daily spending card across Europe, Asia, and the Americas without international banking fees.',
+    dealHighlight: 'Special Invitation Referral: Sign up & unlock welcome reward benefits',
+    promoCode: 'alkhalfgbg!SEP2-26-VR-FR',
+    ctaText: 'Claim Revolut Account & Card',
+    url: 'https://revolut.com/referral/?referral-code=alkhalfgbg!SEP2-26-VR-FR&geo-redirect',
+    iconType: 'creditCard'
+  },
+  {
     id: 'airalo',
     category: 'esim',
     badge: '200+ Countries Global Connectivity',

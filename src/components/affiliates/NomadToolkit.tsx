@@ -267,20 +267,31 @@ export const GlobalBankingCallout: React.FC = () => {
         <div>
           <span className="text-xs font-bold text-white">Avoid Foreign Bank Fees &amp; FX Markups</span>
           <p className="text-xs text-slate-300 mt-0.5">
-            Traveling across multiple currencies? <strong>Wise</strong> gives you real mid-market exchange rates with local account numbers in EUR, USD, and GBP.
+            Traveling across multiple currencies? <strong>Revolut</strong> &amp; <strong>Wise</strong> give you real-time interbank rates with zero hidden markups on international card payments and cash withdrawals.
           </p>
         </div>
       </div>
 
-      <a
-        href="https://wise.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs flex items-center gap-1.5 transition-colors shrink-0 shadow-sm"
-      >
-        <span>Open Free Wise Account</span>
-        <ExternalLink className="w-3 h-3" />
-      </a>
+      <div className="flex items-center gap-2 shrink-0">
+        <a
+          href="https://revolut.com/referral/?referral-code=alkhalfgbg!SEP2-26-VR-FR&geo-redirect"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
+        >
+          <span>Get Revolut</span>
+          <ExternalLink className="w-3 h-3" />
+        </a>
+        <a
+          href="https://wise.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs flex items-center gap-1.5 transition-colors border border-slate-700"
+        >
+          <span>Wise Account</span>
+          <ExternalLink className="w-3 h-3" />
+        </a>
+      </div>
     </div>
   );
 };
