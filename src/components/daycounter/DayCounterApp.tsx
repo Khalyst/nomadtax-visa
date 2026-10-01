@@ -46,8 +46,10 @@ import {
   Search,
   X,
   Share2,
-  BookmarkCheck
+  BookmarkCheck,
+  BookOpen
 } from 'lucide-react';
+import { SeoContentHub } from '../seo/SeoContentHub';
 
 const STORAGE_KEY = 'utilitylab_user_trips';
 
@@ -135,7 +137,14 @@ export const DayCounterApp: React.FC<DayCounterAppProps> = ({ onTripsChange }) =
   const [taxMode, setTaxMode] = useState<'calendar_year' | 'rolling_365'>('calendar_year');
 
   // Active Global Section Tab
-  const [activeGlobalTab, setActiveGlobalTab] = useState<'all' | 'schengen' | 'us_spt' | 'americas_apac' | 'tax'>('all');
+  const [activeGlobalTab, setActiveGlobalTab] = useState<'all' | 'schengen' | 'us_spt' | 'americas_apac' | 'tax' | 'knowledge'>('all');
+
+  // Check if hash has a guide or knowledge hub request
+  useEffect(() => {
+    if (window.location.hash.includes('guide=') || window.location.hash.includes('knowledge')) {
+      setActiveGlobalTab('knowledge');
+    }
+  }, []);
 
   // Selected region for regional rules
   const [activeRegion, setActiveRegion] = useState<Region>('americas');
@@ -433,7 +442,37 @@ export const DayCounterApp: React.FC<DayCounterAppProps> = ({ onTripsChange }) =
             {taxSummaries.length} countries
           </span>
         </button>
+
+        <button
+          onClick={() => setActiveGlobalTab('knowledge')}
+          className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 ${
+            activeGlobalTab === 'knowledge'
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+              : 'bg-slate-900 text-indigo-400 hover:text-indigo-300 border border-indigo-900/60'
+          }`}
+        >
+          <BookOpen className="w-3.5 h-3.5 text-indigo-400" />
+          <span>{t('tab_knowledge_hub')}</span>
+          <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-indigo-950/80 text-indigo-300 border border-indigo-800/80">
+            4 Guides
+          </span>
+        </button>
       </div>
+
+      {/* SEO Compliance Knowledge Base Section */}
+      {activeGlobalTab === 'knowledge' && (
+        <section className="animate-fadeIn">
+          <SeoContentHub
+            onSelectCalculatorTab={(targetTab) => {
+              if (targetTab === 'schengen') setActiveGlobalTab('schengen');
+              else if (targetTab === 'us-spt') setActiveGlobalTab('us_spt');
+              else if (targetTab === 'americas-apac') setActiveGlobalTab('americas_apac');
+              else if (targetTab === 'tax-residency') setActiveGlobalTab('tax');
+              else setActiveGlobalTab('all');
+            }}
+          />
+        </section>
+      )}
 
       {/* Main Metric Cards Grid (Schengen & Forward Planning) */}
       {(activeGlobalTab === 'all' || activeGlobalTab === 'schengen') && (

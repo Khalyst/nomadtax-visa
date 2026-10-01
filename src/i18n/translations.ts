@@ -36,6 +36,7 @@ export const translations = {
     tab_us_spt: 'USA Substantial Presence (SPT)',
     tab_americas_apac: 'Americas & Asia-Pacific Rules',
     tab_tax_residency: '183-Day Tax Clocks',
+    tab_knowledge_hub: 'Compliance Guides & SEO Hub',
 
     // Presets
     presets_title: 'Quick Traveler Scenarios (Presets)',
