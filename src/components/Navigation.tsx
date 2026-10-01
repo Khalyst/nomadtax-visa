@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Compass, ShieldCheck, Download, PlaneTakeoff, Share2, Check, Copy } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { LanguageSelector } from './LanguageSelector';
+import { PWAInstallPrompt } from './pwa/PWAInstallPrompt';
 
 interface NavigationProps {
   tripCount: number;
@@ -62,6 +63,9 @@ export const Navigation: React.FC<NavigationProps> = ({
               <span className="hidden md:inline">{t('share_plan')}</span>
             </button>
           )}
+
+          {/* PWA Install Button for Mobile & Desktop */}
+          <PWAInstallPrompt />
 
           {/* Language Selector Dropdown */}
           <LanguageSelector />

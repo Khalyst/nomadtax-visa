@@ -77,8 +77,8 @@ export const NomadToolkit: React.FC<NomadToolkitProps> = ({ contextualCategory =
             </p>
           </div>
 
-          {/* Ethics Note */}
-          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 text-[11px] text-slate-400 max-w-xs space-y-1">
+          {/* Ethics Note & Verification */}
+          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 text-[11px] text-slate-400 max-w-xs space-y-1.5">
             <div className="flex items-center gap-1.5 text-slate-300 font-semibold">
               <Info className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
               <span>Transparent Referral Disclosure</span>
@@ -86,6 +86,9 @@ export const NomadToolkit: React.FC<NomadToolkitProps> = ({ contextualCategory =
             <p>
               When you purchase with these referral codes, you receive exclusive discounts (like $3 off your eSIM or 75% off cloud hosting) and support this free tool at zero extra cost to you.
             </p>
+            <div className="pt-1 border-t border-slate-800/60 font-mono text-[10px] text-slate-400 select-all">
+              Impact-Site-Verification: d1ac0866-18fb-437e-97c3-f5ab36d57364
+            </div>
           </div>
         </div>
 
@@ -215,6 +218,14 @@ export const NomadToolkit: React.FC<NomadToolkitProps> = ({ contextualCategory =
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Verification footer tag for affiliate network spiders and crawler validation */}
+      <div className="pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400">
+        <span>Curated partner network verified for international remote workers</span>
+        <span className="font-mono text-[10px] text-slate-400 select-all bg-slate-950/80 px-2.5 py-1 rounded border border-slate-800/80">
+          Impact-Site-Verification: d1ac0866-18fb-437e-97c3-f5ab36d57364
+        </span>
       </div>
     </div>
   );

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="50%" stop-color="#4338ca" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <linearGradient id="compassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+    <linearGradient id="needleNorth" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="100%" stop-color="#e11d48" />
+    </linearGradient>
+    <linearGradient id="needleSouth" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e2e8f0" />
+      <stop offset="100%" stop-color="#94a3b8" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background rounded rect -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+
+  <!-- Outer ambient ring -->
+  <circle cx="256" cy="256" r="176" fill="none" stroke="#6366f1" stroke-width="6" opacity="0.4" stroke-dasharray="8 8" />
+
+  <!-- Main compass dial border -->
+  <circle cx="256" cy="256" r="150" fill="#0f172a" stroke="#818cf8" stroke-width="12" filter="url(#glow)" />
+
+  <!-- Cardinal points markings -->
+  <circle cx="256" cy="120" r="4" fill="#a5b4fc" />
+  <circle cx="256" cy="392" r="4" fill="#a5b4fc" />
+  <circle cx="120" cy="256" r="4" fill="#a5b4fc" />
+  <circle cx="392" cy="256" r="4" fill="#a5b4fc" />
+
+  <!-- Compass Needle (North - Rose/Red) -->
+  <polygon points="256,136 280,256 256,242" fill="url(#needleNorth)" />
+  <polygon points="256,136 232,256 256,242" fill="#fb7185" />
+
+  <!-- Compass Needle (South - Slate/White) -->
+  <polygon points="256,376 280,256 256,270" fill="url(#needleSouth)" />
+  <polygon points="256,376 232,256 256,270" fill="#cbd5e1" />
+
+  <!-- Center Pin -->
+  <circle cx="256" cy="256" r="16" fill="#1e1b4b" stroke="#38bdf8" stroke-width="4" />
+  <circle cx="256" cy="256" r="6" fill="#38bdf8" />
+
+  <!-- Global Visa/Day Check Badge -->
+  <g transform="translate(320, 320)">
+    <circle cx="36" cy="36" r="36" fill="#10b981" stroke="#0f172a" stroke-width="6" />
+    <path d="M24 36 L32 44 L48 26" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>
