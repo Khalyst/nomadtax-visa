@@ -1,6 +1,6 @@
 export interface AffiliatePartner {
   id: string;
-  category: 'insurance' | 'banking' | 'esim' | 'vpn' | 'tax';
+  category: 'insurance' | 'banking' | 'esim' | 'vpn' | 'hosting';
   badge: string;
   name: string;
   tagline: string;
@@ -8,12 +8,51 @@ export interface AffiliatePartner {
   keyBenefits: string[];
   nomadFit: string;
   dealHighlight: string;
+  promoCode?: string;
   ctaText: string;
-  url: string; // User can update with their personalized affiliate ref ID
-  iconType: 'shield' | 'creditCard' | 'wifi' | 'lock' | 'receipt';
+  url: string;
+  iconType: 'shield' | 'creditCard' | 'wifi' | 'lock' | 'server';
 }
 
 export const AFFILIATE_PARTNERS: AffiliatePartner[] = [
+  {
+    id: 'airalo',
+    category: 'esim',
+    badge: '200+ Countries Global Connectivity',
+    name: 'Airalo Global & Regional eSIMs',
+    tagline: 'Instant local data when you touch down in any airport worldwide without swapping physical SIMs.',
+    description: 'Keep your primary phone number active for bank 2FA SMS while getting high-speed 5G local data packages across Schengen, the US, and Asia.',
+    keyBenefits: [
+      'Regional plans covering 39 European countries under one eSIM',
+      'Instant QR code activation before boarding your flight',
+      'Zero international roaming shock bills'
+    ],
+    nomadFit: 'Never get stuck without navigation or taxi apps at customs arrivals.',
+    dealHighlight: 'Use referral code AKAY3659 for $3 USD discount on your first eSIM!',
+    promoCode: 'AKAY3659',
+    ctaText: 'Claim $3 Off with Code AKAY3659',
+    url: 'https://www.airalo.com/profile/referral',
+    iconType: 'wifi'
+  },
+  {
+    id: 'hostinger',
+    category: 'hosting',
+    badge: 'Top Nomad Business & Cloud Infrastructure',
+    name: 'Hostinger Cloud & Web Hosting',
+    tagline: 'Fast, secure website & domain hosting for remote businesses, digital portfolios, and nomad projects.',
+    description: 'Power your custom domain, email boxes, and high-performance web projects with 99.9% uptime, free SSL, and worldwide CDN locations.',
+    keyBenefits: [
+      'Up to 75% off premium web and cloud hosting packages',
+      'Free custom domain name, corporate email & automated SSL included',
+      'Global server centers in the US, Europe, Singapore, Brazil & more'
+    ],
+    nomadFit: 'Host client sites or launch your remote businesses from anywhere with zero friction.',
+    dealHighlight: 'Special Partner Discount applied via referral code QF8AKAY94S6L',
+    promoCode: 'QF8AKAY94S6L',
+    ctaText: 'Activate Hostinger Discount (Code: QF8AKAY94S6L)',
+    url: 'https://hostinger.fr/?REFERRALCODE=QF8AKAY94S6L',
+    iconType: 'server'
+  },
   {
     id: 'safetywing',
     category: 'insurance',
@@ -49,24 +88,6 @@ export const AFFILIATE_PARTNERS: AffiliatePartner[] = [
     ctaText: 'Open Free Multi-Currency Account',
     url: 'https://wise.com',
     iconType: 'creditCard'
-  },
-  {
-    id: 'airalo',
-    category: 'esim',
-    badge: '200+ Countries Global Connectivity',
-    name: 'Airalo Global & Regional eSIMs',
-    tagline: 'Instant local data when you touch down in any airport worldwide without swapping physical SIMs.',
-    description: 'Keep your primary phone number active for bank 2FA SMS while getting high-speed 5G local data packages across Schengen, the US, and Asia.',
-    keyBenefits: [
-      'Regional plans covering 39 European countries under one eSIM',
-      'Instant QR code activation before boarding your flight',
-      'Zero international roaming shock bills'
-    ],
-    nomadFit: 'Never get stuck without navigation or taxi apps at customs arrivals.',
-    dealHighlight: 'Plans starting from $4.50 for regional packages',
-    ctaText: 'Explore Regional eSIM Plans',
-    url: 'https://www.airalo.com',
-    iconType: 'wifi'
   },
   {
     id: 'nordvpn',
